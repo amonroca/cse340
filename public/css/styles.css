@@ -4,3 +4,177 @@
 *:after {
   box-sizing: border-box;
 }
+
+:root {
+  --main-blue: rgb(18, 123, 188);
+}
+
+header, nav, main, footer {
+  max-width: 980px;
+  margin: auto;
+  padding: 0;
+}
+
+body h1 {
+  font-size: 1.2rem;
+}
+
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+#top-header .siteName {
+  text-align: left;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#top-header .siteName a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#top-header #tools {
+  text-align: right;
+  font-size: 1.2rem;
+}
+
+#top-header #tools a {
+  text-decoration: none;
+  color: inherit;
+}
+
+nav {
+  background-color: #333;
+  padding: 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav ul li {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+nav ul li:hover {
+  cursor: pointer;
+  background-color: #444;
+  transition: background-color 0.3s;
+}
+
+#wrapper {
+  max-width: 980px;
+  font-family: Arial, sans-serif;
+  line-height: 1.25;
+  background-color: white;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.image-container {
+  position: relative;
+  text-align: center;
+}
+
+.delorean-image {
+  width: 80vw;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  width: 35vw;
+  color: var(--main-blue);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.own-today {
+  width: 30vw;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.own-today:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+.upgrades-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(130px, 1fr));
+  gap: 20px;
+}
+
+.upgrades-container h3 {
+  text-align: left;
+  grid-column: span 2;
+  margin-bottom: 0;
+}
+
+.upgrades-container figure {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  border: solid 3px var(--main-blue);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin: auto;
+}
+
+.upgrades-container figure img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.reviews-container,
+.upgrades-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.reviews-container ul {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.main-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
