@@ -245,3 +245,16 @@ VALUES (
         'White',
         5
     );
+-- Update the inv_description of the inventory item with ID 10 from 'small interiors' to 'a huge interior'
+UPDATE inventory
+SET inv_description = REPLACE(
+        inv_description,
+        'small interiors',
+        'a huge interior'
+    )
+WHERE inv_id = 10;
+-- Update the inv_image and inv_thumbnail of all inventory items to include the path '/images/vehicles/' before the image name
+-- For example, if the current inv_image is 'car.jpg', it should be updated to '/images/vehicles/car.jpg'
+UPDATE inventory
+SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
+    inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
