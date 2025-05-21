@@ -73,6 +73,11 @@ nav ul li:hover {
   transition: background-color 0.3s;
 }
 
+nav ul li a {
+  text-decoration: none;
+  color: white;
+}
+
 #wrapper {
   max-width: 980px;
   font-family: Arial, sans-serif;

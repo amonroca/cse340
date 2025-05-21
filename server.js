@@ -10,6 +10,8 @@ const env = require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
 const expressLayouts = require("express-ejs-layouts")
+const baseController = require("./controllers/baseController")
+const utilities = require("./utilities/")
 
 /* ***********************
  * View Engine and Template Engine
@@ -24,8 +26,12 @@ app.set("layout", "layouts/layout")
 app.use(static)
 
 // Index route
-app.get("/", (req, res) => {
-  res.render("index", { title: "Home" })
+app.get("/", baseController.buildHome)
+
+// File Not Found Route
+// This route must be placed after all other routes
+app.use(async (req, res, next) => {
+  next({status: 404, message: "Sorry, we cannot find that!"})
 })
 
 /* ***********************
@@ -40,4 +46,18 @@ const host = process.env.HOST
  *************************/
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
+})
+
+/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message: err.message,
+    nav
+  })
 })
