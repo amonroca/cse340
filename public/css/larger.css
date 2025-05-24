@@ -63,4 +63,14 @@
         margin-top: 30px;
         flex-direction: row;
     }
+
+    .vehicle-detail-container {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 40px;
+    }
+    .vehicle-detail-image,
+    .vehicle-detail-info {
+        max-width: 50%;
+    }
 }

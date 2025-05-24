@@ -12,6 +12,7 @@ const static = require("./routes/static")
 const expressLayouts = require("express-ejs-layouts")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities/")
+const inventoryController = require("./controllers/inventoryController")
 
 /* ***********************
  * View Engine and Template Engine
@@ -27,6 +28,10 @@ app.use(static)
 
 // Index route
 app.get("/", baseController.buildHome)
+
+// Inventory routes
+app.get("/inv/type/:classification_id", inventoryController.buildVehicleList)
+app.get("/inv/detail/:inv_id", inventoryController.buildVehicleDetail)
 
 // File Not Found Route
 // This route must be placed after all other routes
