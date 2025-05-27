@@ -3,7 +3,7 @@
 -- Create the ENUM type for account types
 -- This ENUM type is used to define the different types of accounts in the system.
 CREATE TYPE public.account_type AS ENUM ('Client', 'Employee', 'Admin');
-ALTER TYPE public.account_type OWNER TO csemotors;
+ALTER TYPE public.account_type OWNER TO cse340v2;
 -- Create the classification table
 -- This table stores the different classifications of vehicles.
 CREATE TABLE public.classification (
