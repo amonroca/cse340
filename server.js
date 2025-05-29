@@ -13,11 +13,10 @@ const inventoryRoutes = require("./routes/inventoryRoute")
 const accountRoutes = require("./routes/accountRoute")
 const expressLayouts = require("express-ejs-layouts")
 const baseController = require("./controllers/baseController")
-const utilities = require("./utilities/")
-// const inventoryController = require("./controllers/inventoryController")
 const session = require("express-session")
 const pool = require('./database/')
 const bodyParser = require("body-parser")
+const errorHandler = require("./middleware/errorHandler")
 
 /* ***********************
  * View Engine and Template Engine
@@ -46,6 +45,12 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
+/*app.use(function(req, res, next){
+  res.locals.messages = function(type) {
+    return req.flash(type)
+  }
+  next()
+})*/
 
 // Body Parser Middleware
 app.use(bodyParser.json())
@@ -89,12 +94,4 @@ app.listen(port, () => {
 * Express Error Handler
 * Place after all other middleware
 *************************/
-app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message: err.message,
-    nav
-  })
-})
+app.use(errorHandler)

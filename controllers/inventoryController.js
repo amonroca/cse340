@@ -33,8 +33,8 @@ invController.buildVehicleDetail = async function (req, res, next) {
         const nav = await utilities.getNav()
         const vehicleDetail = await utilities.getVehicleDetail(inv_id)
 
-        if (!vehicleDetail || vehicleDetail.title === "Vehicle Detail") {
-            const err = new Error("Vehicle not found")
+        if (!vehicleDetail || vehicleDetail.html === "Vehicle not found.") {
+            const err = new Error("Vehicle not found.")
             err.status = 404
             return next(err)
         }

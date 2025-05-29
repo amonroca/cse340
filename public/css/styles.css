@@ -307,7 +307,7 @@ nav ul li a {
   color: #555;
 }
 
-.flash-message {
+/*.flash-message {
   background: #e6ffed;
   color: #207544;
   border: 1px solid #b2f2c2;
@@ -317,12 +317,50 @@ nav ul li a {
   text-align: center;
 }
 
+.flash-error-message {
+  background: #ffe0e0;
+  color: #a00;
+  border: 1px solid #fbb;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 18px;
+  text-align: center;
+  list-style: none;
+}
+
 .flash-message,
 .flash-message ul,
 .flash-message li {
   list-style: none;
   padding-left: 0;
   margin-left: 0;
+}*/
+
+#messages ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px 0;
+}
+#messages ul li {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.error li {
+  background: #ffe0e0;
+  color: #a00;
+  border: 1px solid #fbb;
+}
+.success li {
+  background: #e6ffed;
+  color: #207544;
+  border: 1px solid #b2f2c2;
+}
+.notice li {
+  background: #e6f0ff;
+  color: #205080;
+  border: 1px solid #b2d0f2;
 }
 
 .login-form label {
@@ -434,4 +472,14 @@ nav ul li a {
 
 .login-link:hover {
   text-decoration: underline;
+}
+
+.form-hint {
+  font-size: 0.97rem;
+  color: #b85c00;
+  background: #fffbe6;
+  border-left: 4px solid #ffd580;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
 }
