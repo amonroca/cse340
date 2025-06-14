@@ -1,0 +1,20 @@
+<h1><%= title %></h1>
+<%- messages() %>
+<% if (errors) { %>
+  <div id="messages">
+    <ul class="error">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <%  }) %>
+    </ul>
+  </div>
+<% } %>
+<div class="register-container">
+    <form class="register-form" id="classificationForm" action="add-classification" method="post">
+        <p>The filed is required</p>
+        <label for="classification-name">Classification Name</label>
+        <input type="text" id="classification_name" name="classification_name" required>
+        <div class="form-hint">Name must be alphabetic characters only.</div>
+        <button type="submit">Add Classification</button>
+    </form>
+</div>

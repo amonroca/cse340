@@ -45,12 +45,6 @@ app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
-/*app.use(function(req, res, next){
-  res.locals.messages = function(type) {
-    return req.flash(type)
-  }
-  next()
-})*/
 
 // Body Parser Middleware
 app.use(bodyParser.json())

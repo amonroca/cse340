@@ -307,35 +307,6 @@ nav ul li a {
   color: #555;
 }
 
-/*.flash-message {
-  background: #e6ffed;
-  color: #207544;
-  border: 1px solid #b2f2c2;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 18px;
-  text-align: center;
-}
-
-.flash-error-message {
-  background: #ffe0e0;
-  color: #a00;
-  border: 1px solid #fbb;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 18px;
-  text-align: center;
-  list-style: none;
-}
-
-.flash-message,
-.flash-message ul,
-.flash-message li {
-  list-style: none;
-  padding-left: 0;
-  margin-left: 0;
-}*/
-
 #messages ul {
   list-style: none;
   padding: 0;
@@ -437,7 +408,10 @@ nav ul li a {
 
 .register-form input[type="text"],
 .register-form input[type="email"],
-.register-form input[type="password"] {
+.register-form input[type="password"],
+.register-form input[type="number"],
+.register-form textarea,
+.register-form select {
   width: 100%;
   padding: 8px 10px;
   margin-bottom: 16px;
