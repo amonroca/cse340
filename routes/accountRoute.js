@@ -6,6 +6,6 @@ const validate = require("../utilities/account-validation")
 router.get("/login", accountController.buildLogin)
 router.get("/register", accountController.buildRegister)
 router.post("/register", validate.registrationRules(), validate.checkRegData, accountController.registerAccount)
-router.post("/login", validate.loginRules(), validate.checkLoginData, accountController.fakeLogin)
+router.post("/login", validate.loginRules(), validate.checkLoginData, accountController.accountLogin)
 
 module.exports = router

@@ -1,6 +1,8 @@
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 /* ****************************************
 *  Deliver login view
@@ -90,6 +92,9 @@ async function registerAccount(req, res, next) {
     }
 }
 
+/* ****************************************
+*  Fake login for testing purposes
+* *************************************** */
 async function fakeLogin(req, res, next) {
     try {
         let nav = await utilities.getNav()
@@ -123,4 +128,53 @@ async function fakeLogin(req, res, next) {
     }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin }
+/* ****************************************
+*  Process Account Login
+* *************************************** */
+async function accountLogin(req, res, next) {
+    let nav = await utilities.getNav()
+    const { account_email, account_password } = req.body
+    const accountData = await accountModel.getAccountByEmail(account_email)
+    if (!accountData) {
+        req.flash("error", "No account found with that email.")
+        res.status(400).render("account/login", {
+            title: "Login",
+            nav,
+            errors: null,
+            account_email,
+        })
+        return
+    }
+    try {
+        if (await bcrypt.compare(account_password, accountData.account_password)) {
+            delete accountData.account_password // Remove password from session data
+            const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+            if (process.env.NODE_ENV === "development") {
+                res.cookie("jwt", accessToken, {
+                    httpOnly: true,
+                    secure: false, // Set to true in production
+                    maxAge: 3600000 // 1 hour
+                })
+            } else {
+                res.cookie("jwt", accessToken, {
+                    httpOnly: true,
+                    secure: true, // Set to true in production
+                    maxAge: 3600000 // 1 hour
+                })
+            }
+            return res.redirect("/account/")
+        } else {
+            req.flash("error", "Incorrect password.")
+            res.status(400).render("account/login", {
+                title: "Login",
+                nav,
+                errors: null,
+                account_email,
+            })
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin, accountLogin }
