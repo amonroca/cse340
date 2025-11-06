@@ -1,4 +1,6 @@
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 const Util = {}
 
 /* ************************
@@ -154,6 +156,70 @@ Util.addInventory = async function (inventoryData) {
 		return { success: true, inv_id: data.rows[0].inv_id }
 	} else {
 		return { success: false, message: "Failed to add inventory." }
+	}
+}
+
+Util.updateInventory = async function (inventoryData) {
+	let {
+		inv_id,
+		inv_make,
+		inv_model,
+		inv_year,
+		inv_miles,
+		inv_color,
+		inv_price,
+		inv_description,
+		inv_image,
+		inv_thumbnail,
+		classification_id
+	} = inventoryData
+
+	let data = await invModel.updateInventory(
+		inv_id,
+		inv_make,
+		inv_model,
+		inv_year,
+		inv_miles,
+		inv_color,
+		inv_price,
+		inv_description,
+		inv_image,
+		inv_thumbnail,
+		classification_id
+	)
+
+	if (data.rows.length) {
+		return { success: true, inv_id: data.rows[0].inv_id }
+	} else {
+		return { success: false, message: "Failed to update inventory." }
+	}
+	//console.log(data)
+	//return data.rows[0]
+}
+
+Util.checkJWTToken = (req, res, next) => {
+	if (req.cookies && req.cookies.jwt) {
+		jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+			if (err) {
+				req.flash("error", "Please log in again.")
+				res.clearCookie("jwt")
+				return res.redirect("/account/login")
+			}
+			res.locals.accountData = accountData
+			res.locals.loggedin = 1
+			next()
+		})
+	} else {
+		next()
+	}
+}
+
+Util.checkLogin = (req, res, next) => {
+	if (res.locals.loggedin) {
+		next()
+	} else {
+		req.flash("notice", "You must be logged in to access this page.")
+		return res.redirect("/account/login")
 	}
 }
 

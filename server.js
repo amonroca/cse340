@@ -6,8 +6,8 @@
  * Require Statements
  *************************/
 const express = require("express")
-const env = require("dotenv").config()
 const app = express()
+const utilities = require("./utilities/")
 const static = require("./routes/static")
 const inventoryRoutes = require("./routes/inventoryRoute")
 const accountRoutes = require("./routes/accountRoute")
@@ -53,6 +53,9 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 
 // Cookie Parser Middleware
 app.use(cookieParser())
+
+// JWT Token Check Middleware
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * Routes

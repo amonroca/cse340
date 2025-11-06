@@ -1,6 +1,14 @@
-<h1><%= title %></h1>
+<h1>
+    <%= title %>
+</h1>
 <%- messages() %>
-<div>
-    <p><a href="add-classification">Add New Classification</a></p>
-	<p><a href="add-inventory">Add New Vehicle</a></p>
-</div>
+    <div>
+        <p><a href="add-classification">Add New Classification</a></p>
+        <p><a href="add-inventory">Add New Vehicle</a></p>
+    </div>
+    <h2>Manage Inventory</h2>
+    <p>Choose a classification to see those vehicles</p>
+    <%- classificationSelect %>
+        <table id="inventoryDisplay"></table>
+        <noscript>JavaScript is required to view this page.</noscript>
+        <script src="/js/inventory.js"></script>

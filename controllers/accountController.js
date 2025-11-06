@@ -162,9 +162,15 @@ async function accountLogin(req, res, next) {
                     maxAge: 3600000 // 1 hour
                 })
             }
-            return res.redirect("/account/")
+            req.flash("success", "You are logged in.")
+            res.render("account/management", {
+                title: "Account Management",
+                nav,
+                welcomeMessage: `Welcome back, ${accountData.account_firstname}!`,
+                errors: null,
+            })
         } else {
-            req.flash("error", "Incorrect password.")
+            req.flash("error", "Please check your password and try again.")
             res.status(400).render("account/login", {
                 title: "Login",
                 nav,
@@ -177,4 +183,20 @@ async function accountLogin(req, res, next) {
     }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin, accountLogin }
+/* ****************************************
+*  Build Account Management View
+* *************************************** */
+async function buildAccountManagement(req, res, next) {
+    try {
+        let nav = await utilities.getNav()
+        res.render("account/management", {
+            title: "Account Management",
+            nav,
+            errors: null,
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin, accountLogin, buildAccountManagement }

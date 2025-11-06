@@ -29,4 +29,9 @@ async function setInventory(inv_make, inv_model, inv_year, inv_miles, inv_color,
         [inv_make, inv_model, inv_year, inv_miles, inv_color, inv_price, inv_description, inv_image, inv_thumbnail, classification_id])
 }
 
-module.exports = {getClassifications, getVehicleListByClassificationId, getVehicleById, getClassificationById, setClassification, setInventory}
+async function updateInventory(inv_id, inv_make, inv_model, inv_year, inv_miles, inv_color, inv_price, inv_description, inv_image, inv_thumbnail, classification_id) {
+    return await pool.query("UPDATE public.inventory SET inv_make = $1, inv_model = $2, inv_year = $3, inv_miles = $4, inv_color = $5, inv_price = $6, inv_description = $7, inv_image = $8, inv_thumbnail = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *", 
+        [inv_make, inv_model, inv_year, inv_miles, inv_color, inv_price, inv_description, inv_image, inv_thumbnail, classification_id, inv_id])
+}
+
+module.exports = {getClassifications, getVehicleListByClassificationId, getVehicleById, getClassificationById, setClassification, setInventory, updateInventory}

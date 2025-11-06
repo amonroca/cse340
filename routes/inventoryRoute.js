@@ -10,5 +10,9 @@ router.get("/add-classification", inventoryController.buildAddClassification)
 router.post("/add-classification", validate.addClassificationRules(), validate.checkAddClassificationData, inventoryController.addClassification)
 router.get("/add-inventory", inventoryController.buildAddInventory)
 router.post("/add-inventory", validate.addInventoryRules(), validate.checkAddInventoryData, inventoryController.addInventory)
+router.get("/getInventory/:classification_id", inventoryController.getInventoryJSON)
+router.get("/edit/:inv_id", inventoryController.buildEditInventory)
+router.post("/edit-inventory", validate.addInventoryRules(), validate.checkEditInventoryData, inventoryController.updateInventory)
+//router.post("/delete-inventory", inventoryController.deleteInventory)
 
 module.exports = router
