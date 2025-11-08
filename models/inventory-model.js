@@ -34,4 +34,8 @@ async function updateInventory(inv_id, inv_make, inv_model, inv_year, inv_miles,
         [inv_make, inv_model, inv_year, inv_miles, inv_color, inv_price, inv_description, inv_image, inv_thumbnail, classification_id, inv_id])
 }
 
-module.exports = {getClassifications, getVehicleListByClassificationId, getVehicleById, getClassificationById, setClassification, setInventory, updateInventory}
+async function deleteInventory(inv_id) {
+    return await pool.query("DELETE FROM public.inventory WHERE inv_id = $1", [inv_id])
+}
+
+module.exports = {getClassifications, getVehicleListByClassificationId, getVehicleById, getClassificationById, setClassification, setInventory, updateInventory, deleteInventory}

@@ -96,6 +96,17 @@ Util.getClassification = async function (classification_id) {
 	}
 }
 
+Util.getVehicleById = async function (inv_id) {
+	let data = await invModel.getVehicleById(inv_id)
+	// Check if the vehicle exists
+	if (!data.rows.length) {
+		return "Vehicle not found."
+	} else {
+		// Return the vehicle data
+		return data.rows[0]
+	}
+}
+
 Util.addClassification = async function (classification_name) {
 	let data = await invModel.setClassification(classification_name)
 	// Check if the classification was added successfully
@@ -193,8 +204,15 @@ Util.updateInventory = async function (inventoryData) {
 	} else {
 		return { success: false, message: "Failed to update inventory." }
 	}
-	//console.log(data)
-	//return data.rows[0]
+}
+
+Util.deleteInventory = async function (inv_id) {
+	let data = await invModel.deleteInventory(inv_id)
+	if (data.rowCount) {
+		return { success: true }
+	} else {
+		return { success: false, message: "Failed to delete inventory." }
+	}
 }
 
 Util.checkJWTToken = (req, res, next) => {
@@ -220,6 +238,26 @@ Util.checkLogin = (req, res, next) => {
 	} else {
 		req.flash("notice", "You must be logged in to access this page.")
 		return res.redirect("/account/login")
+	}
+}
+
+/* ************************
+ * Require Employee or Admin
+ * Uses JWT-decoded res.locals.accountData
+ * If not authorized, deliver the login view (do not just hide via CSS)
+ ************************** */
+Util.requireEmployeeOrAdmin = async (req, res, next) => {
+	try {
+		const acct = res.locals && res.locals.accountData
+		const isAllowed = !!(acct && (acct.account_type === "Employee" || acct.account_type === "Admin"))
+		if (isAllowed) return next()
+
+		// Not authorized: deliver login view with message
+		req.flash("error", "You must be logged in with Employee or Admin privileges to access this area.")
+		const nav = await Util.getNav()
+		return res.status(403).render("account/login", { title: "Login", nav, errors: null })
+	} catch (e) {
+		next(e)
 	}
 }
 

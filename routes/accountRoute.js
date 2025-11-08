@@ -13,5 +13,9 @@ router.get("/login", accountController.buildLogin)
 router.get("/register", accountController.buildRegister)
 router.post("/register", validate.registrationRules(), validate.checkRegData, accountController.registerAccount)
 router.post("/login", validate.loginRules(), validate.checkLoginData, accountController.accountLogin)
+router.get("/logout", accountController.logout)
+router.get("/update", utilities.checkLogin, accountController.buildAccountUpdate)
+router.post("/update", utilities.checkLogin, validate.editAccountRules(), validate.checkEditAccountData, accountController.processAccountUpdate)
+router.post("/update-password", utilities.checkLogin, validate.updatePasswordRules(), validate.checkUpdatePasswordData, accountController.processPasswordUpdate)
 
 module.exports = router

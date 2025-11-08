@@ -462,3 +462,71 @@ button:disabled {
   background: #999 !important;
   cursor: not-allowed !important;
 }
+
+.delete-warning {
+  font-size: 0.97rem;
+  color: #a00;
+  background: #ffe0e0;
+  border-left: 4px solid #ff8080;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#deleteForm button {
+  background: #a00;
+}
+
+#deleteForm button:hover {
+  background: #800;
+}
+
+#deleteForm input[type="text"],
+#deleteForm input[type="number"] {
+  background-color: #f0f0f0;
+}
+
+.update-container {
+  max-width: 400px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 32px 28px 24px 28px;
+}
+
+.update-form input[type="text"],
+.update-form input[type="email"],
+.update-form input[type="password"],
+.update-form input[type="number"],
+.update-form textarea,
+.update-form select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 16px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.update-form button {
+  width: 100%;
+  padding: 10px;
+  background: var(--main-blue, #127bbc);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.update-form button:hover {
+  background: #0e5e8c;
+}
+
+#passwordUpdateForm {
+  margin-top: 30px;
+}

@@ -163,10 +163,14 @@ async function accountLogin(req, res, next) {
                 })
             }
             req.flash("success", "You are logged in.")
-            res.render("account/management", {
+            // Populate res.locals for header.ejs
+            res.locals.loggedin = 1
+            res.locals.accountData = accountData
+            return res.render("account/management", {
                 title: "Account Management",
                 nav,
                 welcomeMessage: `Welcome back, ${accountData.account_firstname}!`,
+                accountType: accountData.account_type,
                 errors: null,
             })
         } else {
@@ -187,11 +191,14 @@ async function accountLogin(req, res, next) {
 *  Build Account Management View
 * *************************************** */
 async function buildAccountManagement(req, res, next) {
+    const accountData = res.locals.accountData
     try {
         let nav = await utilities.getNav()
         res.render("account/management", {
             title: "Account Management",
             nav,
+            welcomeMessage: `Welcome back, ${accountData.account_firstname}!`,
+            accountType: accountData.account_type,
             errors: null,
         })
     } catch (error) {
@@ -199,4 +206,100 @@ async function buildAccountManagement(req, res, next) {
     }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin, accountLogin, buildAccountManagement }
+/* ****************************************
+*  Process Logout
+* *************************************** */
+async function logout(req, res, next) {
+    try {
+        // Mensagem de sucesso
+        req.flash("success", "You have been logged out.")
+        // Limpa cookie do JWT
+        res.clearCookie("jwt")
+        // Redireciona para home (PRG)
+        return res.redirect("/")
+    } catch (error) {
+        next(error)
+    }
+}
+
+/* ****************************************
+*  Deliver Account Update View
+* *************************************** */
+async function buildAccountUpdate(req, res, next) {
+    try {
+        const nav = await utilities.getNav()
+        // Prefer data from JWT
+        const account_id = res.locals?.accountData?.account_id || req.query.account_id
+        let acct = null
+        if (account_id) {
+            acct = await accountModel.getAccountById(account_id)
+        }
+        return res.render("account/update", {
+            title: "Update Account",
+            nav,
+            errors: null,
+            account_id: acct?.account_id,
+            account_firstname: acct?.account_firstname,
+            account_lastname: acct?.account_lastname,
+            account_email: acct?.account_email
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+/* ****************************************
+*  Process Account Info Update
+* *************************************** */
+async function processAccountUpdate(req, res, next) {
+    try {
+        const nav = await utilities.getNav()
+        const { account_id, account_firstname, account_lastname, account_email } = req.body
+        // Update DB
+        const result = await accountModel.updateAccountInfo(account_id, account_firstname, account_lastname, account_email)
+        if (!result || result.rowCount !== 1) {
+            req.flash("error", "Account update failed. Please try again.")
+            return res.redirect("/account/update") // PRG pattern on failure
+        }
+        // Success: fetch updated data, issue fresh JWT (invalidate old token) and redirect (PRG)
+        const updated = await accountModel.getAccountById(account_id)
+        if (updated) {
+            // Remove password hash before embedding in JWT
+            const { account_password, ...safePayload } = updated
+            const newToken = jwt.sign(safePayload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+            if (process.env.NODE_ENV === "development") {
+                res.cookie("jwt", newToken, { httpOnly: true, secure: false, maxAge: 3600000 })
+            } else {
+                res.cookie("jwt", newToken, { httpOnly: true, secure: true, maxAge: 3600000 })
+            }
+        }
+        req.flash("success", "Account updated successfully.")
+        return res.redirect("/account")
+    } catch (error) {
+        next(error)
+    }
+}
+
+/* ****************************************
+*  Process Password Update
+* *************************************** */
+async function processPasswordUpdate(req, res, next) {
+    try {
+        const { account_id, account_password } = req.body
+        // Hash new password
+        const hashed = await bcrypt.hash(account_password, 10)
+        const result = await accountModel.updateAccountPassword(account_id, hashed)
+        if (!result || result.rowCount !== 1) {
+            req.flash("error", "Password update failed. Please try again.")
+            return res.redirect("/account/update") // PRG pattern on failure
+        }
+        // Invalidate old token: clear cookie and force re-login for security
+        res.clearCookie("jwt")
+        req.flash("success", "Password updated successfully. Please log in again.")
+        return res.redirect("/account/login")
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, fakeLogin, accountLogin, buildAccountManagement, logout, buildAccountUpdate, processAccountUpdate, processPasswordUpdate }
