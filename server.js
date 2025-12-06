@@ -18,6 +18,7 @@ const pool = require('./database/')
 const bodyParser = require("body-parser")
 const errorHandler = require("./middleware/errorHandler")
 const cookieParser = require("cookie-parser")
+const favoriteRoutes = require("./routes/favoriteRoute")
 
 /* ***********************
  * View Engine and Template Engine
@@ -70,6 +71,9 @@ app.use("/inv", inventoryRoutes)
 
 // Account route
 app.use("/account", accountRoutes)
+
+// Favorites route
+app.use("/favorites", favoriteRoutes)
 
 // File Not Found Route
 // This route must be placed after all other routes

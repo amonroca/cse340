@@ -1,6 +1,7 @@
 const { parse } = require("dotenv")
 const utilities = require("../utilities/")
 const invModel = require("../models/inventory-model")
+const favoriteModel = require("../models/favorite-model")
 const invController = {}
 
 /* ****************************************
@@ -37,7 +38,7 @@ invController.buildVehicleList = async function (req, res, next) {
 * *************************************** */
 invController.buildVehicleDetail = async function (req, res, next) {
     try {
-        const inv_id = req.params.inv_id
+        const inv_id = parseInt(req.params.inv_id)
         const nav = await utilities.getNav()
         const vehicleDetail = await utilities.getVehicleDetail(inv_id)
 
@@ -46,11 +47,22 @@ invController.buildVehicleDetail = async function (req, res, next) {
             err.status = 404
             return next(err)
         }
-
+        // Determine if this vehicle is in user's favorites
+        let isFavorite = false
+        if (res.locals && res.locals.loggedin) {
+            try {
+                const account_id = res.locals.accountData.account_id
+                isFavorite = await favoriteModel.isFavorite(account_id, inv_id)
+            } catch (e) {
+                // Non-fatal: leave isFavorite = false
+            }
+        }
         res.render("inventory/detail", {
             title: vehicleDetail.title,
             nav,
             vehicleDetail: vehicleDetail.html,
+            inv_id,
+            isFavorite,
         })
     } catch (error) {
         next(error)

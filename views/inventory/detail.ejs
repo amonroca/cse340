@@ -1,4 +1,25 @@
-<h1><%= title %></h1>
-<div>
-    <%- vehicleDetail %>
-</div>
+<h1>
+    <%= title %>
+</h1>
+<%- messages() %>
+    <div>
+        <%- vehicleDetail %>
+    </div>
+
+    <% if (locals.loggedin) { %>
+        <div class="favorite-actions" style="margin-top:1rem;">
+            <% if (typeof isFavorite !=='undefined' && isFavorite) { %>
+                <form action="/favorites/remove" method="post" style="display:inline;">
+                    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+                    <input type="hidden" name="redirectTo" value="/inv/detail/<%= inv_id %>">
+                    <button type="submit" class="remove-favorite-button">Remove from Favorites</button>
+                </form>
+                <% } else { %>
+                    <form action="/favorites/add" method="post" style="display:inline;">
+                        <input type="hidden" name="inv_id" value="<%= inv_id %>">
+                        <input type="hidden" name="redirectTo" value="/inv/detail/<%= inv_id %>">
+                        <button type="submit" class="favorite-button">Add to Favorites</button>
+                    </form>
+                    <% } %>
+        </div>
+        <% } %>

@@ -6,6 +6,7 @@
         <% if (locals.loggedin) { %>
             <a href="/account" title="Go to your account management">Welcome <%= locals.accountData ?
                     locals.accountData.account_firstname : 'Client' %></a>
+            <a href="/favorites" title="View your favorite vehicles">Favorites</a>
             <a href="/account/logout" title="Log out of your account">Logout</a>
             <% } else { %>
                 <a title="Click to log in" href="/account/login">My Account</a>

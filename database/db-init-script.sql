@@ -3,7 +3,7 @@
 -- Create the ENUM type for account types
 -- This ENUM type is used to define the different types of accounts in the system.
 CREATE TYPE public.account_type AS ENUM ('Client', 'Employee', 'Admin');
-ALTER TYPE public.account_type OWNER TO cse340db;
+ALTER TYPE public.account_type OWNER TO cse340db_user;
 -- Create the classification table
 -- This table stores the different classifications of vehicles.
 CREATE TABLE public.classification (
@@ -258,3 +258,12 @@ WHERE inv_id = 10;
 UPDATE inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+-- Favorites feature schema
+-- Creates a table to store a user's favorite vehicles
+CREATE TABLE IF NOT EXISTS public.account_favorites (
+    favorite_id SERIAL PRIMARY KEY,
+    account_id INTEGER NOT NULL REFERENCES public.account(account_id) ON DELETE CASCADE,
+    inv_id INTEGER NOT NULL REFERENCES public.inventory(inv_id) ON DELETE CASCADE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE (account_id, inv_id)
+);

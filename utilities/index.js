@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const favoriteModel = require("../models/favorite-model")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const Util = {}
@@ -258,6 +259,37 @@ Util.requireEmployeeOrAdmin = async (req, res, next) => {
 		return res.status(403).render("account/login", { title: "Login", nav, errors: null })
 	} catch (e) {
 		next(e)
+	}
+}
+
+/* ************************
+* Return the HTML favorite list for an account
+************************** */
+Util.getFavoriteList = async function (account_id) {
+	const data = await favoriteModel.getFavoritesByAccountId(account_id)
+	if (!data.rows.length) {
+		return "You have no favorite vehicles yet."
+	} else {
+		let cards = '<div class="vehicle-cards">'
+		data.rows.forEach((row) => {
+		cards += `
+		<div class="vehicle-card">
+			<img src="${row.inv_thumbnail}" alt="Thumbnail of ${row.inv_make} ${row.inv_model}" class="vehicle-thumb"/>
+			<div class="vehicle-info">
+			<h2>${row.inv_make} ${row.inv_model}</h2>
+			<p>${row.inv_year}</p>
+			<a href="/inv/detail/${row.inv_id}" title="See details for ${row.inv_make} ${row.inv_model}">View Details</a>
+			<form action="/favorites/remove" method="post" style="display:inline;">
+				<input type="hidden" name="inv_id" value="${row.inv_id}">
+				<input type="hidden" name="redirectTo" value="/favorites">
+				<button type="submit" class="remove-favorite-button">Remove</button>
+            </form>
+			</div>
+		</div>
+		`
+		})
+		cards += '</div>'
+		return cards
 	}
 }
 
